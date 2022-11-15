@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="JSPForm:war2">
+    <output-path>$PROJECT_DIR$/out/artifacts/JSPForm_war2</output-path>
+    <root id="archive" name="JSPForm_war.war">
+      <element id="artifact" artifact-name="JSPForm:war exploded" />
+    </root>
+  </artifact>
+</component>
