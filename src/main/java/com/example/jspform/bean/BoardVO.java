@@ -5,6 +5,8 @@ import java.util.Date;
 public class BoardVO {
 
     private int id;
+
+    private String photo;
     private String firstName;
     private String lastName;
     private String birthday;
@@ -102,5 +104,14 @@ public class BoardVO {
 
     public void setRegdate(Date regdate) {
         this.regdate = regdate;
+    }
+
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

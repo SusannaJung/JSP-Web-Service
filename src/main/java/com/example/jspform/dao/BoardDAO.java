@@ -15,10 +15,9 @@ public class BoardDAO {
     Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
-
-    private final String BOARD_INSERT = "insert into BOARD (firstName, lastName, birthday, gender, email, phone, information, userType, account) values (?,?,?,?,?,?,?,?,?)";
-    private final String BOARD_UPDATE = "update BOARD set firstName=?, lastName=?, birthday=?, gender=?, email=?, phone=?, information=?, userType=?, account=? where id=?";
-
+    private final String BOARD_INSERT = "insert into BOARD (firstName, lastName, birthday, gender, email, phone, information, userType, account, photo) values (?,?,?,?,?,?,?,?,?,?)";
+    private final String BOARD_UPDATE = "update BOARD set firstName=?, lastName=?, birthday=?, gender=?, email=?, phone=?, information=?, userType=?, account=?, photo=? where id=?";
+    private final String BOARD_SELECT = "select photo from BOARD where id=?";
     private final String BOARD_DELETE = "delete from BOARD  where id=?";
     private final String BOARD_GET = "select * from BOARD  where id=?";
     private final String BOARD_LIST = "select * from BOARD order by id desc";
@@ -37,7 +36,7 @@ public class BoardDAO {
             stmt.setString(7, vo.getInformation());
             stmt.setString(8, vo.getUserType());
             stmt.setString(9, vo.getAccount());
-
+            stmt.setString(10, vo.getPhoto());
             stmt.executeUpdate();
             return 1;
         } catch (Exception e) {
@@ -72,9 +71,10 @@ public class BoardDAO {
             stmt.setString(7, vo.getInformation());
             stmt.setString(8, vo.getUserType());
             stmt.setString(9, vo.getAccount());
-            stmt.setInt(10, vo.getId());
+            stmt.setString(10, vo.getPhoto());
+            stmt.setInt(11, vo.getId());
 
-            System.out.println(vo.getFirstName() + "-" + vo.getLastName() + "-" + vo.getBirthday() + "-" + vo.getGender() + "-" + vo.getEmail() + "-" + vo.getPhone() + "-" + vo.getInformation() + "-" + vo.getUserType() + "-" + vo.getAccount() + "-" + vo.getId());
+            System.out.println(vo.getFirstName() + "-" + vo.getLastName() + "-" + vo.getBirthday() + "-" + vo.getGender() + "-" + vo.getEmail() + "-" + vo.getPhone() + "-" + vo.getInformation() + "-" + vo.getUserType() + "-" + vo.getAccount() + "-" + vo.getPhoto() + "-" + vo.getId());
             stmt.executeUpdate();
             return 1;
 
@@ -94,6 +94,7 @@ public class BoardDAO {
             rs = stmt.executeQuery();
             if(rs.next()) {
                 one.setId(rs.getInt("id"));
+                one.setPhoto(rs.getString("photo"));
                 one.setFirstName(rs.getString("firstName"));
                 one.setLastName(rs.getString("lastName"));
                 one.setBirthday(rs.getString("birthday"));
@@ -121,6 +122,7 @@ public class BoardDAO {
             while(rs.next()) {
                 BoardVO one = new BoardVO();
                 one.setId(rs.getInt("id"));
+                one.setPhoto(rs.getString("photo"));
                 one.setFirstName(rs.getString("firstName"));
                 one.setLastName(rs.getString("lastName"));
                 one.setBirthday(rs.getString("birthday"));
@@ -138,5 +140,23 @@ public class BoardDAO {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public String getPhotoFilename(int id){
+        String filename = null;
+        try{
+            conn = JDBCUtil.getConnection();
+            stmt = conn.prepareStatement(BOARD_SELECT);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            if(rs.next()){
+                filename = rs.getString("photo");
+            }
+            rs.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("==> JDBC로 getPhotoFilename()기능 처리");
+        return filename;
     }
 }
